@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#071c1d">
+<title>Eagles IQ — Mystery Eagle</title>
+<style>
+:root{--green:#004c54;--green2:#0b6972;--ink:#071012;--panel:#101b1e;--panel2:#162428;--line:#294044;--silver:#a5acaf;--white:#f7fbfc;--muted:#91a2a6;--good:#27864b;--bad:#6f3437;--close:#a87820}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% -10%,#12383b 0,#081416 35%,#050a0b 100%);color:var(--white);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+body{padding:env(safe-area-inset-top) 14px calc(28px + env(safe-area-inset-bottom));}
+button,input{font:inherit}
+button{cursor:pointer}
+.shell{width:min(760px,100%);margin:auto}
+header{display:flex;align-items:center;justify-content:space-between;padding:16px 2px 13px;border-bottom:1px solid rgba(165,172,175,.22)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:950;letter-spacing:.08em}.mark{width:34px;height:34px;border:1px solid #47757a;border-radius:9px;display:grid;place-items:center;background:linear-gradient(145deg,#0b646c,#07373c);font-size:20px}
+.icon{width:38px;height:38px;border-radius:10px;background:#122125;border:1px solid var(--line);color:#fff;font-weight:900}
+.hero{text-align:center;padding:30px 8px 20px}.eyebrow{font-size:12px;letter-spacing:.18em;color:#b9c7ca;font-weight:850}.hero h1{font-size:clamp(30px,8vw,48px);line-height:.98;margin:9px 0 10px;letter-spacing:-.04em}.hero p{color:var(--muted);margin:0;font-size:14px}
+.card{background:linear-gradient(180deg,rgba(19,33,36,.96),rgba(11,20,22,.98));border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 22px 70px rgba(0,0,0,.32)}
+.status{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:12px;color:var(--muted);font-weight:750}.status b{color:#fff}
+.search-wrap{position:relative}.search-row{display:flex;gap:8px}.search{flex:1;min-width:0;width:100%;height:54px;border-radius:13px;border:1px solid #3b565b;background:#081214;color:#fff;padding:0 16px;font-size:16px;outline:none}.search:focus{border-color:#72aab0;box-shadow:0 0 0 3px rgba(114,170,176,.12)}.search::placeholder{color:#6f8185}.guess-btn{height:54px;min-width:88px;padding:0 14px;border-radius:13px;border:1px solid #52787d;background:linear-gradient(145deg,#0b6972,#004c54);color:#fff;font-weight:950;letter-spacing:.05em}.guess-btn:disabled{opacity:.35;cursor:default}.guess-btn:not(:disabled):active{transform:scale(.97)}
+.dropdown{display:none;position:absolute;top:60px;left:0;right:0;z-index:20;background:#132125;border:1px solid #385156;border-radius:13px;overflow:hidden;max-height:290px;overflow-y:auto;box-shadow:0 16px 35px #000}.dropdown.show{display:block}.pick{display:flex;justify-content:space-between;gap:10px;width:100%;padding:13px 14px;border:0;border-bottom:1px solid #263a3e;background:transparent;color:#fff;text-align:left}.pick:last-child{border-bottom:0}.pick:hover,.pick:focus{background:#1c3034}.pick small{color:#92a4a8}
+.legend{display:flex;gap:13px;flex-wrap:wrap;margin:14px 2px 2px;color:#91a3a7;font-size:11px;font-weight:700}.dot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px}.g{background:var(--good)}.y{background:var(--close)}.r{background:var(--bad)}
+.board{margin-top:18px;display:flex;flex-direction:column;gap:10px}
+.guess{border:1px solid #294044;border-radius:15px;overflow:hidden;background:#0d1719}.guess-name{padding:10px 12px;font-weight:900;font-size:15px;border-bottom:1px solid #263b3f;display:flex;justify-content:space-between}.guess-name small{font-size:11px;color:#8ea0a4;font-weight:700}
+.cells{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:#263b3f}.cell{min-width:0;background:#142225;padding:10px 4px;text-align:center}.cell.good{background:rgba(39,134,75,.72)}.cell.bad{background:rgba(111,52,55,.65)}.cell.close{background:rgba(168,120,32,.7)}.lab{font-size:9px;color:#d4dddf;opacity:.72;text-transform:uppercase;font-weight:800;letter-spacing:.05em}.val{font-size:12px;font-weight:900;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.arrow{font-size:10px;margin-left:2px}
+.empty{border:1px dashed #294044;border-radius:14px;height:60px;display:grid;place-items:center;color:#50666a;font-size:12px;font-weight:800;letter-spacing:.05em}
+.result{display:none;text-align:center;margin-top:18px;padding:22px 16px;border:1px solid #36575c;border-radius:16px;background:linear-gradient(160deg,#123135,#101c1f)}.result.show{display:block}.result h2{font-size:27px;margin:0 0 6px}.result p{color:#9db0b4;margin:5px 0 16px}.share{border:0;border-radius:12px;padding:13px 20px;background:#e9f0f1;color:#071012;font-weight:900}
+.footer{text-align:center;color:#607579;font-size:11px;margin:20px 0}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:50;padding:20px;align-items:center;justify-content:center}.modal.show{display:flex}.modalbox{width:min(500px,100%);background:#101c1f;border:1px solid #385156;border-radius:18px;padding:20px}.modalhead{display:flex;justify-content:space-between;align-items:center}.modal h2{margin:0}.modal p,.modal li{color:#a7b6b9;line-height:1.5;font-size:14px}.modal ul{padding-left:20px}
+@media(max-width:520px){.cells{grid-template-columns:repeat(5,1fr)}.cell{padding:9px 2px}.val{font-size:10.5px}.lab{font-size:8px}.card{padding:12px}.hero{padding-top:24px}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header><div class="brand"><div class="mark">🦅</div><span>EAGLES IQ</span></div><button class="icon" id="helpBtn" aria-label="How to play">?</button></header>
+<section class="hero"><div class="eyebrow">DAILY MYSTERY EAGLE</div><h1>WHO'S THAT EAGLE?</h1><p id="puzzleLabel">Six guesses. One Philadelphia Eagle.</p></section>
+<div class="card">
+  <div class="status"><span>GUESS <b id="guessCount">1</b> OF 6</span><span id="dayStatus">Today's puzzle</span></div>
+  <div class="search-wrap">
+    <div class="search-row">
+      <input id="playerSearch" class="search" autocomplete="off" placeholder="Search an Eagles player…" aria-label="Search Eagles player">
+      <button type="button" id="guessBtn" class="guess-btn" disabled>GUESS</button>
+    </div>
+    <div id="dropdown" class="dropdown"></div>
+  </div>
+  <div class="legend"><span><i class="dot g"></i>Match</span><span><i class="dot y"></i>Close</span><span><i class="dot r"></i>No match</span><span>↑ mystery is higher/later · ↓ lower/earlier</span></div>
+  <div id="board" class="board"></div>
+  <div id="result" class="result"><h2 id="resultTitle"></h2><p id="resultText"></p><button id="shareBtn" class="share">Share Result</button></div>
+</div>
+<div class="footer">A new Mystery Eagle arrives at midnight Eastern.<br><span style="opacity:.55">Build FIX-2</span></div>
+</div>
+<div id="modal" class="modal"><div class="modalbox"><div class="modalhead"><h2>How to play</h2><button class="icon" id="closeModal">×</button></div><p>Guess the daily Mystery Eagle in six tries. Everyone gets the same player.</p><ul><li><b>Green</b> means an exact match.</li><li><b>Gold</b> means a close numeric match.</li><li>Arrows tell you whether the mystery player's number/year is higher or lower.</li><li>Your guesses are saved on this device, so refreshing won't reset the game.</li></ul></div></div>
+<script>
+const PLAYERS = [
+
+["Jalen Hurts",1,"QB","Alabama / Oklahoma",2020,2,2020],["A.J. Brown",11,"WR","Ole Miss",2019,2,2022],["DeVonta Smith",6,"WR","Alabama",2021,1,2021],["Saquon Barkley",26,"RB","Penn State",2018,1,2024],["Dallas Goedert",88,"TE","South Dakota State",2018,2,2018],["Lane Johnson",65,"OT","Oklahoma",2013,1,2013],["Jordan Mailata",68,"OT","None",0,0,2018],["Landon Dickerson",69,"G","Alabama",2021,2,2021],["Cam Jurgens",51,"C","Nebraska",2022,2,2022],["Jahan Dotson",3,"WR","Penn State",2022,1,2024],
+["Brandon Graham",55,"DE","Michigan",2010,1,2010],["Fletcher Cox",91,"DT","Mississippi State",2012,1,2012],["Jason Kelce",62,"C","Cincinnati",2011,6,2011],["Nick Foles",9,"QB","Arizona",2012,3,2012],["Carson Wentz",11,"QB","North Dakota State",2016,1,2016],["Zach Ertz",86,"TE","Stanford",2013,2,2013],["Malcolm Jenkins",27,"S","Ohio State",2009,1,2014],["Chris Long",56,"DE","Virginia",2008,1,2017],["LeGarrette Blount",29,"RB","Oregon",2010,0,2017],["Jay Ajayi",36,"RB","Boise State",2015,5,2017],
+["Alshon Jeffery",17,"WR","South Carolina",2012,2,2017],["Nelson Agholor",13,"WR","USC",2015,1,2015],["Torrey Smith",82,"WR","Maryland",2011,2,2017],["Trey Burton",88,"TE","Florida",2014,0,2014],["Corey Clement",30,"RB","Wisconsin",2017,0,2017],["Jake Elliott",4,"K","Memphis",2017,5,2017],["Rodney McLeod",23,"S","Virginia",2012,0,2016],["Nigel Bradham",53,"LB","Florida State",2012,4,2016],["Mychal Kendricks",95,"LB","California",2012,2,2012],["Vinny Curry",75,"DE","Marshall",2012,2,2012],
+["Darius Slay",2,"CB","Mississippi State",2013,2,2020],["Javon Hargrave",97,"DT","South Carolina State",2016,3,2020],["Haason Reddick",7,"LB","Temple",2017,1,2022],["James Bradberry",24,"CB","Samford",2016,2,2022],["C.J. Gardner-Johnson",8,"S","Florida",2019,4,2022],["Miles Sanders",26,"RB","Penn State",2019,2,2019],["Quez Watkins",16,"WR","Southern Miss",2020,6,2020],["Boston Scott",35,"RB","Louisiana Tech",2018,6,2018],["Kenneth Gainwell",14,"RB","Memphis",2021,5,2021],["Josh Sweat",94,"DE","Florida State",2018,4,2018],
+["Jordan Davis",90,"DT","Georgia",2022,1,2022],["Nakobe Dean",17,"LB","Georgia",2022,3,2022],["Reed Blankenship",32,"S","Middle Tennessee",2022,0,2022],["Quinyon Mitchell",27,"CB","Toledo",2024,1,2024],["Cooper DeJean",33,"CB","Iowa",2024,2,2024],["Jalen Carter",98,"DT","Georgia",2023,1,2023],["Nolan Smith",3,"LB","Georgia",2023,1,2023],["Mekhi Becton",77,"G","Louisville",2020,1,2024],["Bryce Huff",0,"DE","Memphis",2020,0,2024],["Oren Burks",42,"LB","Vanderbilt",2018,3,2024],
+["Brian Dawkins",20,"S","Clemson",1996,2,1996],["Donovan McNabb",5,"QB","Syracuse",1999,1,1999],["Brian Westbrook",36,"RB","Villanova",2002,3,2002],["Terrell Owens",81,"WR","Chattanooga",1996,3,2004],["DeSean Jackson",10,"WR","California",2008,2,2008],["Jeremy Maclin",18,"WR","Missouri",2009,1,2009],["LeSean McCoy",25,"RB","Pittsburgh",2009,2,2009],["Brent Celek",87,"TE","Cincinnati",2007,5,2007],["Tra Thomas",72,"OT","Florida State",1998,1,1998],["Jon Runyan",69,"OT","Michigan",1996,4,2000],
+["Jamaal Jackson",67,"C","Delaware State",2003,0,2003],["Todd Herremans",79,"G","Saginaw Valley State",2005,4,2005],["Shawn Andrews",73,"G","Arkansas",2004,1,2004],["Jeremiah Trotter",54,"LB","Stephen F. Austin",1998,3,1998],["Lito Sheppard",26,"CB","Florida",2002,1,2002],["Sheldon Brown",24,"CB","South Carolina",2002,2,2002],["Asante Samuel",22,"CB","UCF",2003,4,2008],["Trent Cole",58,"DE","Cincinnati",2005,5,2005],["Jevon Kearse",93,"DE","Florida",1999,1,2004],["Darren Howard",90,"DE","Kansas State",2000,2,2006],
+["David Akers",2,"K","Louisville",1997,0,1999],["Quintin Mikell",27,"S","Boise State",2003,0,2003],["Michael Vick",7,"QB","Virginia Tech",2001,1,2009],["Kevin Kolb",4,"QB","Houston",2007,2,2007],["Jason Avant",81,"WR","Michigan",2006,4,2006],["Riley Cooper",14,"WR","Florida",2010,5,2010],["Brent Brown",0,"OT","",0,0,0],
+["Randall Cunningham",12,"QB","UNLV",1985,2,1985],["Ron Jaworski",7,"QB","Youngstown State",1973,2,1977],["Wilbert Montgomery",31,"RB","Abilene Christian",1977,6,1977],["Harold Carmichael",17,"WR","Southern",1971,7,1971],["Mike Quick",82,"WR","NC State",1982,1,1982],["Keith Byars",41,"RB","Ohio State",1986,1,1986],["Cris Carter",80,"WR","Ohio State",1987,4,1987],["Keith Jackson",88,"TE","Oklahoma",1988,1,1988],["Seth Joyner",59,"LB","UTEP",1986,8,1986],["Clyde Simmons",96,"DE","Western Carolina",1986,9,1986],
+["Reggie White",92,"DE","Tennessee",1984,1,1985],["Jerome Brown",99,"DT","Miami",1987,1,1987],["Eric Allen",21,"CB","Arizona State",1988,2,1988],["Andre Waters",20,"S","Cheyney",1984,0,1984],["Wes Hopkins",48,"S","SMU",1983,2,1983],["Bobby Taylor",21,"CB","Notre Dame",1995,2,1995],["Troy Vincent",23,"CB","Wisconsin",1992,1,1996],["Hugh Douglas",53,"DE","Central State",1995,1,1998],["Duce Staley",22,"RB","South Carolina",1997,3,1997],["Tommy McDonald",25,"WR","Oklahoma",1957,3,1957],
+["Chuck Bednarik",60,"LB","Pennsylvania",1949,1,1949],["Steve Van Buren",15,"RB","LSU",1944,1,1944],["Pete Pihos",35,"WR","Indiana",1945,5,1947],["Norm Van Brocklin",11,"QB","Oregon",1949,4,1958],["Tom Brookshier",40,"CB","Colorado",1953,10,1953],["Bill Bergey",66,"LB","Arkansas State",1969,2,1974],["Roman Gabriel",5,"QB","NC State",1962,1,1973],["Pete Retzlaff",44,"TE","South Dakota State",1953,22,1956],["Tommy Thompson",11,"QB","Tulsa",1940,5,1941],["Concrete Charlie Bednarik",60,"LB","Pennsylvania",1949,1,1949],
+["Ricky Watters",32,"RB","Notre Dame",1991,2,1995],["Irving Fryar",80,"WR","Nebraska",1984,1,1996],["Charlie Garner",25,"RB","Tennessee",1994,2,1994],["Rodney Peete",9,"QB","USC",1989,6,1995],["Ty Detmer",14,"QB","BYU",1992,9,1996],["William Thomas",51,"LB","Texas A&M",1991,4,1991],["Andy Harmon",91,"DT","Kent State",1991,6,1991],["Vai Sikahema",22,"KR","BYU",1986,10,1992],["Fred Barnett",86,"WR","Arkansas State",1990,3,1990],["Calvin Williams",89,"WR","Purdue",1990,5,1990],
+["Correll Buckhalter",28,"RB","Nebraska",2001,4,2001],["Dorsey Levens",25,"RB","Georgia Tech",1994,5,2002],["Freddie Mitchell",84,"WR","UCLA",2001,1,2001],["Todd Pinkston",87,"WR","Southern Miss",2000,2,2000],["James Thrash",80,"WR","Missouri Southern",1997,0,2001],["Chad Lewis",89,"TE","BYU",1997,0,1997],["Derrick Burgess",56,"DE","Mississippi",2001,3,2001],["Corey Simon",90,"DT","Florida State",2000,1,2000],["Dhani Jones",55,"LB","Michigan",2000,6,2004],["Ike Reese",58,"LB","Michigan State",1998,5,1998],
+["Nate Allen",29,"S","South Florida",2010,2,2010],["Connor Barwin",98,"LB","Cincinnati",2009,2,2013],["DeMeco Ryans",59,"LB","Alabama",2006,2,2012],["Brandon Boykin",22,"CB","Georgia",2012,4,2012],["Cary Williams",26,"CB","Washburn",2008,7,2013],["Jeremy Lane",0,"CB","",0,0,0],["Jordan Matthews",81,"WR","Vanderbilt",2014,2,2014],["Darren Sproles",43,"RB","Kansas State",2005,4,2014],["Ryan Mathews",24,"RB","Fresno State",2010,1,2015],["Sam Bradford",7,"QB","Oklahoma",2010,1,2015],
+["Mark Sanchez",3,"QB","USC",2009,1,2014],["Kiko Alonso",50,"LB","Oregon",2013,2,2015],["Byron Maxwell",31,"CB","Clemson",2011,6,2015],["Walter Thurmond",26,"S","Oregon",2010,4,2015],["Jordan Hicks",58,"LB","Texas",2015,3,2015],["Beau Allen",94,"DT","Wisconsin",2014,7,2014],["Bennie Logan",96,"DT","LSU",2013,3,2013],["Cedric Thornton",72,"DT","Southern Arkansas",2011,0,2011],["Evan Mathis",69,"G","Alabama",2005,3,2011],["Jason Peters",71,"OT","Arkansas",2004,0,2009],
+["Brandon Brooks",79,"G","Miami (OH)",2012,3,2016],["Timmy Jernigan",93,"DT","Florida State",2014,2,2017],["Patrick Robinson",21,"CB","Florida State",2010,1,2017],["Stefen Wisniewski",61,"G","Penn State",2011,2,2016],["Jaylen Watkins",26,"S","Florida",2014,4,2014],["Chris Maragos",42,"S","Wisconsin",2010,0,2014],["Mack Hollins",10,"WR","North Carolina",2017,4,2017],["Wendell Smallwood",28,"RB","West Virginia",2016,5,2016],["Derek Barnett",96,"DE","Tennessee",2017,1,2017],["Sidney Jones",22,"CB","Washington",2017,2,2017]
+
+].filter(p=>p[0] && p[6]);
+
+const players = PLAYERS.map(p => ({
+  name:p[0], num:p[1], pos:p[2], college:p[3],
+  draftYear:p[4], draftRound:p[5], debut:p[6]
+}));
+const MAX=6;
+const $=id=>document.getElementById(id);
+const input=$("playerSearch");
+const dropdown=$("dropdown");
+const guessBtn=$("guessBtn");
+const board=$("board");
+let selectedPlayer=null;
+
+function easternKey(){
+  const parts=new Intl.DateTimeFormat("en-US",{
+    timeZone:"America/New_York",year:"numeric",month:"2-digit",day:"2-digit"
+  }).formatToParts(new Date());
+  const o={}; parts.forEach(x=>o[x.type]=x.value);
+  return `${o.year}-${o.month}-${o.day}`;
+}
+function hash(s){
+  let h=2166136261;
+  for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}
+  return h>>>0;
+}
+const day=easternKey();
+const answer=players[hash("EAGLES-IQ-v2-"+day)%players.length];
+const storageKey="eaglesIQ-v2:"+day;
+let state={guesses:[],done:false,won:false};
+try{
+  const saved=JSON.parse(localStorage.getItem(storageKey));
+  if(saved)state=saved;
+}catch(e){}
+state.guesses=(state.guesses||[]).filter(n=>players.some(p=>p.name===n));
+
+function save(){localStorage.setItem(storageKey,JSON.stringify(state));}
+function nclass(a,b,t){return a===b?"good":Math.abs(a-b)<=t?"close":"bad";}
+function tclass(a,b){return a===b?"good":"bad";}
+function arrow(a,b){if(!a||!b||a===b)return"";return b>a?"↑":"↓";}
+function cell(label,value,cls,arr=""){
+  return `<div class="cell ${cls}"><div class="lab">${label}</div><div class="val">${value}${arr?` <span class="arrow">${arr}</span>`:""}</div></div>`;
+}
+
+function render(){
+  board.innerHTML="";
+  state.guesses.forEach(name=>{
+    const p=players.find(x=>x.name===name);
+    const el=document.createElement("div");
+    el.className="guess";
+    el.innerHTML=`<div class="guess-name"><span>${p.name}</span><small>#${p.num} · ${p.pos}</small></div>
+    <div class="cells">
+      ${cell("Position",p.pos,tclass(p.pos,answer.pos))}
+      ${cell("Number","#"+p.num,nclass(p.num,answer.num,5),arrow(p.num,answer.num))}
+      ${cell("College",p.college||"—",tclass(p.college,answer.college))}
+      ${cell("Draft",p.draftYear?`${p.draftYear} R${p.draftRound||"UDFA"}`:"UDFA",nclass(p.draftYear||2000,answer.draftYear||2000,2),arrow(p.draftYear,answer.draftYear))}
+      ${cell("Eagles debut",p.debut,nclass(p.debut,answer.debut,2),arrow(p.debut,answer.debut))}
+    </div>`;
+    board.appendChild(el);
+  });
+  for(let i=state.guesses.length;i<MAX;i++){
+    const e=document.createElement("div");
+    e.className="empty"; e.textContent=`GUESS ${i+1}`; board.appendChild(e);
+  }
+  $("guessCount").textContent=Math.min(state.guesses.length+1,MAX);
+
+  if(state.done){
+    input.disabled=true;
+    guessBtn.disabled=true;
+    dropdown.classList.remove("show");
+    $("result").classList.add("show");
+    $("resultTitle").textContent=state.won?`Got it in ${state.guesses.length}!`:"Better luck tomorrow";
+    $("resultText").textContent=`The Mystery Eagle was ${answer.name}.`;
+    $("dayStatus").textContent="Completed";
+  }else{
+    input.disabled=false;
+    $("result").classList.remove("show");
+    $("dayStatus").textContent="Today's puzzle";
+  }
+}
+
+function wordStartsWith(name,q){
+  return name.toLowerCase().split(/\s+/).some(word=>word.startsWith(q));
+}
+
+function showMatches(){
+  if(state.done)return;
+  const q=input.value.trim().toLowerCase();
+
+  // Any typing clears the prior selection unless it still exactly matches.
+  if(selectedPlayer && selectedPlayer.name.toLowerCase()!==q) selectedPlayer=null;
+
+  // Exact typed full name is valid, but STILL requires pressing GUESS.
+  const exact=players.find(p=>!state.guesses.includes(p.name)&&p.name.toLowerCase()===q);
+  if(exact) selectedPlayer=exact;
+  guessBtn.disabled=!selectedPlayer;
+
+  dropdown.innerHTML="";
+  if(!q){dropdown.classList.remove("show");return;}
+
+  const matches=players
+    .filter(p=>!state.guesses.includes(p.name)&&wordStartsWith(p.name,q))
+    .sort((a,b)=>{
+      const af=a.name.toLowerCase().split(/\s+/)[0].startsWith(q)?0:1;
+      const bf=b.name.toLowerCase().split(/\s+/)[0].startsWith(q)?0:1;
+      return af-bf || a.name.localeCompare(b.name);
+    })
+    .slice(0,50);
+
+  matches.forEach(p=>{
+    const row=document.createElement("button");
+    row.type="button";
+    row.className="pick";
+    row.innerHTML=`<span>${p.name}</span><small>#${p.num} · ${p.pos}</small>`;
+
+    // Use touchend + click for broad iPhone compatibility.
+    const select=ev=>{
+      ev.preventDefault();
+      selectedPlayer=p;
+      input.value=p.name;
+      guessBtn.disabled=false;
+      dropdown.classList.remove("show");
+    };
+    row.addEventListener("touchend",select,{passive:false});
+    row.addEventListener("click",select);
+    dropdown.appendChild(row);
+  });
+
+  dropdown.classList.toggle("show",matches.length>0);
+}
+
+function submitGuess(){
+  if(state.done)return;
+  const typed=input.value.trim().toLowerCase();
+
+  // Re-resolve from the visible field so GUESS never depends on fragile focus state.
+  const p=players.find(x=>!state.guesses.includes(x.name)&&x.name.toLowerCase()===typed);
+  if(!p){
+    guessBtn.disabled=true;
+    return;
+  }
+
+  state.guesses.push(p.name);
+  if(p.name===answer.name){state.done=true;state.won=true;}
+  else if(state.guesses.length>=MAX){state.done=true;state.won=false;}
+
+  selectedPlayer=null;
+  input.value="";
+  guessBtn.disabled=true;
+  dropdown.classList.remove("show");
+  save();
+  render();
+}
+
+input.addEventListener("input",showMatches);
+input.addEventListener("focus",showMatches);
+guessBtn.addEventListener("click",submitGuess);
+
+document.addEventListener("click",e=>{
+  if(!e.target.closest(".search-wrap"))dropdown.classList.remove("show");
+});
+
+$("helpBtn").onclick=()=>$("modal").classList.add("show");
+$("closeModal").onclick=()=>$("modal").classList.remove("show");
+$("modal").onclick=e=>{if(e.target===$("modal"))$("modal").classList.remove("show");};
+
+$("shareBtn").onclick=async()=>{
+  const rows=state.guesses.map(name=>{
+    const p=players.find(x=>x.name===name);
+    return [
+      tclass(p.pos,answer.pos),
+      nclass(p.num,answer.num,5),
+      tclass(p.college,answer.college),
+      nclass(p.draftYear||2000,answer.draftYear||2000,2),
+      nclass(p.debut,answer.debut,2)
+    ].map(c=>c==="good"?"🟩":c==="close"?"🟨":"⬛").join("");
+  }).join("\n");
+  const puzzle=Math.floor((new Date(day+"T12:00:00Z")-new Date("2026-01-01T12:00:00Z"))/86400000)+1;
+  const text=`🦅 EAGLES IQ #${puzzle}\n${state.won?state.guesses.length:"X"}/6\n\n${rows}`;
+  try{
+    if(navigator.share)await navigator.share({title:"Eagles IQ",text,url:location.href});
+    else{
+      await navigator.clipboard.writeText(text+"\n"+location.href);
+      $("shareBtn").textContent="Copied!";
+      setTimeout(()=>$("shareBtn").textContent="Share Result",1600);
+    }
+  }catch(e){}
+};
+
+const puzzle=Math.floor((new Date(day+"T12:00:00Z")-new Date("2026-01-01T12:00:00Z"))/86400000)+1;
+$("puzzleLabel").textContent=`Mystery Eagle #${puzzle} · Six guesses. Same player for everyone.`;
+render();
+</script>
+</body>
+</html>
